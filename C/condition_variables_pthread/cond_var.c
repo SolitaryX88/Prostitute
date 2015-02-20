@@ -1,3 +1,4 @@
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,24 +18,24 @@ void *inc_count(void *t)
   long my_id = (long)t;
 
   for (i=0; i<TCOUNT; i++) {
-    pthread_mutex_lock(&count_mutex);
-    count++;
+	 pthread_mutex_lock(&count_mutex);
+	 count++;
 
-    /* 
-     *     Check the value of count and signal waiting thread when condition is
-     *         reached.  Note that this occurs while mutex is locked. 
-     *             */
-    if (count == COUNT_LIMIT) {
-      pthread_cond_signal(&count_threshold_cv);
-      printf("inc_count(): thread %ld, count = %d  Threshold reached.\n", 
-          my_id, count);
-    }
-    printf("inc_count(): thread %ld, count = %d, unlocking mutex\n", 
-        my_id, count);
-    pthread_mutex_unlock(&count_mutex);
+	 /* 
+		Check the value of count and signal waiting thread when condition is
+		reached.  Note that this occurs while mutex is locked. 
+	 */
+	 if (count == COUNT_LIMIT) {
+		pthread_cond_signal(&count_threshold_cv);
+		printf("inc_count(): thread %ld, count = %d  Threshold reached.\n", 
+			 my_id, count);
+	 }
+	 printf("inc_count(): thread %ld, count = %d, unlocking mutex\n", 
+		  my_id, count);
+	 pthread_mutex_unlock(&count_mutex);
 
-    /* Do some "work" so threads can alternate on mutex lock */
-    sleep(1);
+	 /* Do some "work" so threads can alternate on mutex lock */
+	 sleep(1);
   }
   pthread_exit(NULL);
 }
@@ -46,18 +47,22 @@ void *watch_count(void *t)
   printf("Starting watch_count(): thread %ld\n", my_id);
 
   /*
-   *   Lock mutex and wait for signal.  Note that the pthread_cond_wait 
-   *     routine will automatically and atomically unlock mutex while it waits. 
-   *       Also, note that if COUNT_LIMIT is reached before this routine is run by
-   *         the waiting thread, the loop will be skipped to prevent pthread_cond_wait
-   *           from never returning. 
-   *             */
+	  Lock mutex and wait for signal.  Note that the pthread_cond_wait 
+	  routine will automatically and atomically unlock mutex while it waits. 
+	  Also, note that if COUNT_LIMIT is reached before this routine is run by
+	  the waiting thread, the loop will be skipped to prevent pthread_cond_wait
+	  from never returning. 
+	*/
+  printf("\n#1");
   pthread_mutex_lock(&count_mutex);
+  printf("\n#2");
   while (count<COUNT_LIMIT) {
-    pthread_cond_wait(&count_threshold_cv, &count_mutex);
-    printf("watch_count(): thread %ld Condition signal received.\n", my_id);
-    count += 125;
-    printf("watch_count(): thread %ld count now = %d.\n", my_id, count);
+  printf("\n#3");
+	 pthread_cond_wait(&count_threshold_cv, &count_mutex);
+  printf("\n#4");
+	 printf("watch_count(): thread %ld Condition signal received.\n", my_id);
+	 count += 125;
+	 printf("watch_count(): thread %ld count now = %d.\n", my_id, count);
   }
   pthread_mutex_unlock(&count_mutex);
   pthread_exit(NULL);
@@ -83,7 +88,7 @@ int main (int argc, char *argv[])
 
   /* Wait for all threads to complete */
   for (i=0; i<NUM_THREADS; i++) {
-    pthread_join(threads[i], NULL);
+	 pthread_join(threads[i], NULL);
   }
   printf ("Main(): Waited on %d  threads. Done.\n", NUM_THREADS);
 
@@ -92,4 +97,5 @@ int main (int argc, char *argv[])
   pthread_mutex_destroy(&count_mutex);
   pthread_cond_destroy(&count_threshold_cv);
   pthread_exit(NULL);
+
 }
