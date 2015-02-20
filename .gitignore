@@ -10,7 +10,7 @@
 
 
 #Eclipse 
-/bin/
+/Java/bin/
 .project
 .classpath
 
@@ -19,6 +19,8 @@ hs_err_pid*
 
 # C++
 *.o
+*.out
+*.a
 *.d
 *.so
 C/Debug/
