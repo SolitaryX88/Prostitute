@@ -1,4 +1,4 @@
-package AWT;
+package GUI.AWT;
 
 import java.awt.*;
 import java.awt.event.*;

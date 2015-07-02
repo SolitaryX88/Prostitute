@@ -1,4 +1,4 @@
-package Swing;
+package GUI.Swing;
 
 import java.awt.*;       // Using AWT containers and components
 import java.awt.event.*; // Using AWT events and listener interfaces

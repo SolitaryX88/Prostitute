@@ -1,4 +1,4 @@
-package Swing;
+package GUI.Swing;
 
 public class Debug {
 	   public static void main(String[] args) {
