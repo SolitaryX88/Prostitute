@@ -25,3 +25,4 @@ hs_err_pid*
 *.so
 C/Debug/
 C/Semaphores/Prostitute/Debug
+/bin/
