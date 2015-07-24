@@ -22,8 +22,7 @@
 #define BACKLOG 10 // how many pending connections queue will hold
 
 void sigchld_handler(int s) {
-	while (waitpid(-1, NULL, WNOHANG) > 0)
-		;
+	while (waitpid(-1, NULL, WNOHANG) > 0);
 }
 
 // get sockaddr, IPv4 or IPv6:
@@ -47,10 +46,12 @@ int main(void) {
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE; // use my IP
+
 	if ((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}
+
 // loop through all the results and bind to the first we can
 	for (p = servinfo; p != NULL; p = p->ai_next) {
 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol))
@@ -70,10 +71,12 @@ int main(void) {
 		}
 		break;
 	}
+
 	if (p == NULL) {
 		fprintf(stderr, "server: failed to bind\n");
 		return 2;
 	}
+
 	freeaddrinfo(servinfo); // all done with this structure
 	if (listen(sockfd, BACKLOG) == -1) {
 		perror("listen");

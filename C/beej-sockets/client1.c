@@ -34,12 +34,14 @@ int main(int argc, char *argv[]) {
 	int rv;
 	char s[INET6_ADDRSTRLEN];
 	if (argc != 2) {
-		fprintf(stderr, "usage: client hostname\n");
+		fprintf(stderr, "usage: %s <server-ip>\n",argv[0]);
 		exit(1);
 	}
+
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
+
 	if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
@@ -58,10 +60,12 @@ int main(int argc, char *argv[]) {
 		}
 		break;
 	}
+
 	if (p == NULL) {
 		fprintf(stderr, "client: failed to connect\n");
 		return 2;
 	}
+
 	inet_ntop(p->ai_family, get_in_addr((struct sockaddr *) p->ai_addr), s,
 			sizeof s);
 	printf("client: connecting to %s\n", s);
@@ -70,6 +74,7 @@ int main(int argc, char *argv[]) {
 		perror("recv");
 		exit(1);
 	}
+
 	buf[numbytes] = '\0';
 	printf("client: received '%s'\n", buf);
 	close(sockfd);
